@@ -1,14 +1,21 @@
 import Header from "@/components/Header";
+import { auth } from "@/lib/auth/auth";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 
-export default function UserLayout({
+export default async function UserLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await auth.api.getSession( { headers: await headers()})
+
+  if(!session?.user) redirect('/sign-in')
+
   const user = {
-    id: "1234",
-    name: "name",
-    email: "user@email.com",
+    id: session.user.id,
+    name: session.user.name,
+    email: session.user.email
   };
 
   return (
