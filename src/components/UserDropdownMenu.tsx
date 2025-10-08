@@ -13,9 +13,15 @@ import { Button } from "./ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { LogOut } from "lucide-react";
 import NavItems from "./NavItems";
+import { signOut } from "@/lib/auth/authActions";
 
 const UserDropdownMenu = ({ user }: { user: any }) => {
   const router = useRouter();
+
+  const handleSignOut = async () => {
+    await signOut()
+    router.push('/sign-in')
+  }
 
   return (
     <DropdownMenu>
@@ -55,7 +61,7 @@ const UserDropdownMenu = ({ user }: { user: any }) => {
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator className="bg-gray-600" />
-        <DropdownMenuItem className="text-gray-100 text-md font-medium focus:bg-transparent focus:text-yellow-500 transition-colors cursor-pointer">
+        <DropdownMenuItem onClick={handleSignOut} className="text-gray-100 text-md font-medium focus:bg-transparent focus:text-yellow-500 transition-colors cursor-pointer">
           <LogOut className="w-4 h-4 mr-2 hidden sm:block" />
           Logout
         </DropdownMenuItem>
