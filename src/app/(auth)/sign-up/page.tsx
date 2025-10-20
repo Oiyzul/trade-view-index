@@ -38,6 +38,7 @@ const SignUp = () => {
   const onSubmit = async (data: SignUpFormData) => {
     try {
       const result = await signUpWithEmail(data);
+      console.log(result);
       if (result.success) router.replace("/");
     } catch (err) {
       console.log(err);

@@ -2,6 +2,7 @@
 
 import { headers } from "next/headers";
 import { auth } from "./auth";
+import { inngest } from "../ingest/client";
 
 export const signUpWithEmail = async ({
   email,
@@ -17,12 +18,25 @@ export const signUpWithEmail = async ({
       body: { email, password, name: fullName },
     });
 
+    console.log(response);
+
     if (response) {
+      await inngest.send({
+        name: "app/user.created",
+        data: {
+          email,
+          name: fullName,
+          country,
+          investmentGoals,
+          riskTolerance,
+          preferredIndustry,
+        },
+      });
     }
 
     return { success: true, data: response };
   } catch (err) {
-    return { success: false, error: "Sign up failed" };
+    return { success: false, error: err || "Sign up failed" };
   }
 };
 
@@ -31,7 +45,7 @@ export const signInWithEmail = async ({ email, password }: SignInFormData) => {
     const response = await auth.api.signInEmail({
       body: { email, password },
     });
-    
+
     return { success: true, data: response };
   } catch (err) {
     return { success: false, error: "Sign in failed" };
